@@ -1,0 +1,95 @@
+* {
+    margin:0;
+}
+
+body {
+    color: #f8f8f8;
+    background-color: #282828;
+    font-family: "Helvetica Neue";
+}
+
+header {
+    background-color: #222222;
+    border-bottom: 1px solid #080808;
+    padding: 15px;
+}
+
+header img {
+    float: left;
+    height: 40px;
+}
+
+header h2 {
+    float: right;
+    color: #888888;
+    line-height: 1.7em;
+}
+
+svg {
+    color: #f8f8f8;
+    background-color: #282828;
+    font: 10px sans-serif;
+}
+
+.bubble {
+    stroke: #f8f8f8;
+    cursor: pointer;
+}
+
+.label {
+    fill: #888888;
+}
+
+.date {
+    font: 500 46px "Helvetica Neue";
+    fill: #f8f8f8;
+}
+
+.tooltip {
+    font: 11px sans-serif;
+    color: #f8f8f8;
+    background: #44b75e;
+    padding: 7px;
+    border-radius: 2px;
+}
+
+.tooltip:after {
+    position: absolute;
+    top: 10%;
+    left: 0%;
+    margin-left: -5px;
+    width: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid #44b75e;
+    content: " ";
+    font-size: 0;
+    line-height: 0;
+}
+
+.axis path, .axis line {
+    fill: none;
+    stroke: #fff;
+    shape-rendering: crispEdges;
+}
+
+.axis .tick {
+    fill: #fff;
+}
+
+.gridline {
+    stroke: #888888;
+    shape-rendering: crispEdges;
+}
+
+.crossline {
+    stroke-width: 1px;
+    stroke: #f8f8f8;
+    shape-rendering: crispEdges;
+}
+
+.crosslabel {
+    fill: #fff;
+    font-size: large;
+    font-weight: bold;
+}

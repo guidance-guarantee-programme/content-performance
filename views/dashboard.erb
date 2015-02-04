@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="stylesheets/dashboard.css">
+  <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+  <header>
+    <img src="images/brandmark.png" />
+    <h2>Content Performance</h2>
+    <h1>Pension Wiser</h1>
+  </header>
+
+  <script type="text/javascript">
+      // Motion chart
+      function MotionChart() {
+          // Dimensions
+          var margin = { top: 10, right: 20, bottom: 45, left: 60 };
+          var width = 900;  // default width
+          var height = 500; // default height
+
+          // Scales
+          var xscale = d3.scale.linear();
+          var yscale = d3.scale.linear();
+          var radius = d3.scale.sqrt().range([0, 40]).domain([0, 3000]);
+          var colour = d3.scale.linear().domain([-1, 0, 1]).range(["red", "white", "#44b75e"]);
+
+          // Axes
+          var percent = d3.format("%.0");
+          var xaxis = d3.svg.axis().scale(xscale).orient("bottom").tickFormat(percent);
+          var yaxis = d3.svg.axis().scale(yscale).orient("left");
+
+          // Data accessors
+          var title = function(d) { return d.title; };
+          var date = function(d) { return d.date; };
+          var percentread = function(d) { return +d.observed / +d.expected; };
+          var pageviews = function(d) { return +d.pageviews; };
+          var words = function(d) { return +d.words; };
+          var score = function(d) { return +d.score; };
+          var scrolldepth = function(d) { return colour(1.0); };
+
+          function chart(container) {
+              // Group data by date
+              var data = d3.nest()
+                      .key(date)
+                      .map(container.datum());
+
+              // Update the x and y scales
+              var ymax = d3.max(container.datum(), pageviews);
+              var xdomain = [0, 1.0];
+              var ydomain = [0, ymax + ymax / xaxis.ticks()];
+
+              xscale.range([0, width]).domain(xdomain);
+              yscale.range([height, 0]).domain(ydomain);
+
+              // Create SVG element and set its origin to the top left corner
+              var svg = container.append("svg")
+                      .attr("width", width + margin.left + margin.right)
+                      .attr("height", height + margin.top + margin.bottom)
+                      .append("g")
+                      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+              // Draw x-axis
+              svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xaxis);
+              svg.append("text")
+                      .attr("class", "x label")
+                      .attr("text-anchor", "end")
+                      .attr("x", width)
+                      .attr("y", height - 6)
+                      .text("Percentage of content read : average time on page / expected reading time");
+
+              // Draw y-axis
+              svg.append("g").attr("class", "y axis").call(yaxis);
+              svg.append("text")
+                      .attr("class", "y label")
+                      .attr("text-anchor", "end")
+                      .attr("y", 6)
+                      .attr("dy", ".75em")
+                      .attr("transform", "rotate(-90)")
+                      .text("Unique pageviews");
+
+              // Draw x-gridline
+              svg.append("line")
+                      .attr("class", "x gridline")
+                      .style("stroke-dasharray", ("3, 3"))
+                      .attr({ "x1": width / 2,
+                          "y1": 0,
+                          "x2": width / 2,
+                          "y2": height });
+
+              // Draw y-gridline
+              svg.append("line")
+                      .attr("class", "y gridline")
+                      .style("stroke-dasharray", ("3, 3"))
+                      .attr({ "x1": 0,
+                          "y1": height / 2,
+                          "x2": width,
+                          "y2": height / 2 });
+
+              // Tooltip
+              container.append("div")
+                      .attr("class", "tooltip")
+                      .style("position", "absolute")
+                      .style("z-index", "10")
+                      .style("visibility", "hidden");
+
+              // Date
+              var today = new Date();
+              var label = svg.append("text")
+                      .attr("class", "date")
+                      .attr("text-anchor", "end")
+                      .attr("y", 30)
+                      .attr("x", width)
+                      .text(today.toLocaleDateString("en-GB"));
+
+              // Slider
+              var slider = container.append("input")
+                      .attr("type", "range")
+                      .attr("step", 1)
+                      .attr("list", "dates")
+                      .attr("max", Object.keys(data).length - 1)
+                      .attr("value", Object.keys(data).length - 1);
+
+              var slidedates = container.append("datalist")
+                      .attr("id", "dates");
+
+              for (key in data) {
+                  slidedates.append("option").text(key);
+              }
+
+              slider.on("input", function() {
+                  var slidedates = d3.selectAll("#dates option");
+                  var date = slidedates[0][this.value].value;
+
+                  // Remove old bubbles
+                  svg.selectAll(".bubble").remove();
+
+                  // Draw new bubbles
+                  var bubbles = svg.selectAll("bubble").data(data[date]);
+                  var entering = bubbles.enter().append("circle");
+                  entering.call(position).sort(order);
+
+                  // Update date label
+                  var d = new Date(date);
+                  d.setDate(d.getDate() + 1);
+                  d3.select(".date").text(d.toLocaleDateString("en-GB"));
+              });
+
+              // Draw bubbles
+              today.setDate(today.getDate() - 1);
+              var yesterday = today.toISOString().slice(0, 10);
+              var bubbles = svg.selectAll("bubble").data(data[yesterday]);
+              var entering = bubbles.enter().append("circle");
+              entering.call(position).sort(order);
+          }
+
+          function position(bubble) {
+              // Bubble attributes
+              bubble.attr("cx", function(d) { return xscale(percentread(d)); })
+                      .attr("cy", function(d) { return yscale(pageviews(d)); })
+                      .attr("r", function(d) { return radius(words(d)); })
+                      .attr("class", "bubble")
+                      .style("fill", scrolldepth);
+
+              // Bubble interaction
+              bubble.on("mouseover", showDetails);
+              bubble.on("mouseout", hideDetails);
+          }
+
+          // Sort order: smaller bubbles drawn on top
+          function order(a, b) {
+              return radius(words(b)) - radius(words(a));
+          }
+
+          function showDetails(d) {
+              // Tooltip
+              var tip = "<table><tr colspan='2'><th align='left'>" + d.title + "</th> \
+                    <tr><td>Words</td> \
+                    <td align='right'>" + d.words + "</td></tr> \
+                    <tr><td>Reading score (Flesch-Kincaid)</td> \
+                    <td align='right'>" + Number(d.score).toFixed(2) + "</td></tr> \
+                    <tr><td>Expected reading time (secs)</td> \
+                    <td align='right'>" + Number(d.expected).toFixed(2) + "</td></tr> \
+                    <tr><td>Average time on page (secs)</td> \
+                    <td align='right'>" + Number(d.observed).toFixed(2) + "</td></tr></table>";
+
+              var tooltip = d3.select("div.tooltip");
+              tooltip.html(tip);
+              tooltip.style("top",(d3.event.pageY - 10) + "px").style("left",(d3.event.pageX + 10) + "px");
+              tooltip.style("visibility", "visible");
+          }
+
+          function hideDetails() {
+              d3.select("div.tooltip").style("visibility", "hidden");
+          }
+
+          chart.width = function(value) {
+              if (!arguments.length) return width;
+              width = value - margin.left - margin.right;
+              return chart;
+          };
+
+          chart.height = function(value) {
+              if (!arguments.length) return height;
+              height = value - margin.top - margin.right;
+              return chart;
+          };
+
+          return chart;
+      }
+
+      // Get the container and its dimensions
+      var container = d3.select("body");
+      var width = Number(container.style("width").slice(0, -2));
+      var height = 600;
+
+      // Create motion chart
+      var chart = new MotionChart();
+      chart.width(width);
+      chart.height(height);
+
+      // Load the data into the container and draw the chart
+      d3.csv("/data", function(csv) {
+          container.datum(csv).call(chart);
+      });
+  </script>
+</body>
+</html>
