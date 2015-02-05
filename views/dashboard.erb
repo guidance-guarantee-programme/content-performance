@@ -30,6 +30,11 @@
           var xaxis = d3.svg.axis().scale(xscale).orient("bottom").tickFormat(percent);
           var yaxis = d3.svg.axis().scale(yscale).orient("left");
 
+          var crossline = d3.svg.line()
+                  .x(function(d) { return d.x; })
+                  .y(function(d) { return d.y; })
+                  .interpolate("linear");
+
           // Data accessors
           var title = function(d) { return d.title; };
           var date = function(d) { return d.date; };
@@ -188,10 +193,48 @@
               tooltip.html(tip);
               tooltip.style("top",(d3.event.pageY - 10) + "px").style("left",(d3.event.pageX + 10) + "px");
               tooltip.style("visibility", "visible");
+
+              // Crossline
+              var group = d3.select("svg")
+                      .append("g")
+                      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                      .attr("class", "crossgroup");
+
+              var y = yscale(+d.pageviews);
+              var x = xscale(+d.observed / +d.expected);
+
+              var xline = [{ x: 0, y: y },
+                           { x: width, y: y }];
+
+              var yline = [{ x: x, y: height },
+                           { x: x, y: 0 }];
+
+              group.append("path")
+                      .attr("d", crossline(xline))
+                      .attr("class", "crossline");
+
+              group.append("path")
+                      .attr("d", crossline(yline))
+                      .attr("class", "crossline");
+
+              group.append("text")
+                      .attr("class", "crosslabel")
+                      .attr("text-anchor", "middle")
+                      .attr("y", height + 35)
+                      .attr("x", x)
+                      .text((+d.observed / +d.expected * 100).toFixed(1) + "%");
+
+              group.append("text")
+                      .attr("class", "crosslabel")
+                      .attr("text-anchor", "end")
+                      .attr("y", y + 5)
+                      .attr("x", -20)
+                      .text(d.pageviews);
           }
 
           function hideDetails() {
               d3.select("div.tooltip").style("visibility", "hidden");
+              d3.select(".crossgroup").remove();
           }
 
           chart.width = function(value) {
