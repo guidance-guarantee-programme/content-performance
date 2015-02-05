@@ -14,7 +14,8 @@ class Gooogle
     @client = Google::APIClient.new(:application_name => APPLICATION_NAME, :application_version => APPLICATION_VERSION)
 
     # Load credentials for the service account
-    key = Google::APIClient::KeyUtils.load_from_pkcs12(ENV['GOOGLE_KEY_FILE'], ENV['GOOGLE_KEY_SECRET'])
+    # key = Google::APIClient::KeyUtils.load_from_pkcs12(ENV['GOOGLE_KEY_P12'], ENV['GOOGLE_KEY_SECRET'])
+    key = OpenSSL::PKey::RSA.new(ENV['GOOGLE_KEY_P12'], ENV['GOOGLE_KEY_SECRET'])
 
     @client.authorization = Signet::OAuth2::Client.new(
         :token_credential_uri => 'https://accounts.google.com/o/oauth2/token',
