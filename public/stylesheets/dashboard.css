@@ -93,3 +93,9 @@ svg {
     font-size: large;
     font-weight: bold;
 }
+
+.slider {
+    width: 95%;
+    margin-left: 55px;
+    margin-right: 20px;
+}
