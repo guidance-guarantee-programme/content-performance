@@ -12,6 +12,9 @@ class PensionWiser < Sinatra::Base
   end
 
   configure :development do
+    require 'dotenv'
+    Dotenv.load
+
     register Sinatra::Reloader
   end
 

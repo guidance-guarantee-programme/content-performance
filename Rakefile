@@ -2,13 +2,17 @@ require_relative 'lib/analytics'
 require_relative 'lib/fusion'
 require_relative 'lib/github'
 
-require 'dotenv/tasks'
 require 'csv'
 require 'yaml'
 
-desc 'Collect and analyse data for guides'
+unless ENV['RACK_ENV'] == 'production'
+  require 'dotenv'
+  Dotenv.load
+end
 
-task :collect => :dotenv do
+desc 'Collect data for guides'
+
+task :collect do
   guides = []
 
   # Get guides from GitHub
