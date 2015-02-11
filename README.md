@@ -6,7 +6,7 @@ from Google Analytics to produce this [Content Performance Chart].
 
 The main idea is that:
 
-<tt>If someone spent 60 seconds reading a page and the content on that page takes 300 seconds to read, s/he would have read 20%</tt>
+`If someone spent 60 seconds reading a page and the content on that page takes 300 seconds to read, s/he would have read 20%`
 
 All aggregated data are kept in [Pension Wise Content] table as a shared [Google Fusion Table] 
 so that product and business analysts can access it without the need to involve developers.
@@ -14,16 +14,16 @@ so that product and business analysts can access it without the need to involve 
 ## Percentage of Content Read
 How much of the content would one read if they allocated their entire page-visit to reading.
 
-<tt>Average Time On Page / Expected Reading Time</tt>
+`Average Time On Page / Expected Reading Time`
 
 ### Expected Reading Time
 How long would it take someone to read the entire content on the page.
 
 The number of examples that appear on the page add to the total reading time since they incur extra cognitive load.
 
-<tt>Number of Words / Words Per Second + Number of Examples * 7 seconds</tt>
+`Number of Words / Words Per Second + Number of Examples * 7 seconds`
 
-<tt>Words Per Second = 200 Words Per Minute / 60</tt>
+`Words Per Second = 200 Words Per Minute / 60`
 
 Jakob Nielsen of the Norman Nielsen group uses 200 words per minute (WPM) in [How little do users read?]
 
@@ -83,7 +83,7 @@ Expected Reading Time does not take into account:
 # Usage
 Collect data:
 
-```ruby
+```sh
 rake collect
 ```
 
@@ -97,9 +97,8 @@ $ ./bin/foreman s
 [Pension Wise Google Developers Console]
 
 # Dependencies
-* [Sinatra]
-* [Lingua]
-* [Govspeak Markdown Extension]
+* [Ruby]
+* [Bundler]
 * [Google Fusion Tables API]
 * [Google Analytics Reporting API]
 * [D3 Data-Driven Documents]
@@ -121,8 +120,6 @@ $ ./bin/foreman s
 [Content Performance chart]: http://ggp-content-performance.herokuapp.com
 [Pension Wise Content]: https://www.google.com/fusiontables/DataSource?docid=1QUbEiGVnM6NWOJ62ciDwQMkUjTI0XjMZJg4FAJTo
 [Pension Wise Google Developers Console]: https://console.developers.google.com/project/pension-wise
-[Sinatra]: http://www.sinatrarb.com
-[Lingua]: https://rubygems.org/gems/lingua
 [Govspeak Markdown Extension]: https://github.com/alphagov/govspeak
 [Google Fusion Table]: http://tables.googlelabs.com
 [Google Fusion Tables API]: https://developers.google.com/fusiontables
