@@ -4,6 +4,8 @@ against the number of unique pageviews that each page received during a day. Ana
 content from the [content directory] of the [pension guidance repository] and combines it with data 
 from Google Analytics to produce this [Content Performance Chart].
 
+![Pension Wise Content Performance Chart](https://drive.google.com/uc?export=download&id=0B7zsOWH2PAIZaERLSmxkTF9OaUk)
+
 The main idea is that:
 
 `If someone spent 60 seconds reading a page and the content on that page takes 300 seconds to read, s/he would have read 20%`
@@ -42,6 +44,10 @@ A session according to [how visits are calculated in Google Analytics](https://s
 expires after 30 minutes of inactivity or at midnight.
 
 # Interpretation
+What can we _learn_ by looking at this chart and what can we _do_ about it?
+
+![Pension Wise Content Performance Chart](https://drive.google.com/uc?export=download&id=0B7zsOWH2PAIZWmc3TjBiVGFpRTQ)
+
 ## Top Left Quarter: Challenge
 _Enough people_ visit that page but _read less than 50%_ of its content:
 
@@ -120,7 +126,8 @@ $ ./bin/foreman s
 [Content Performance chart]: http://ggp-content-performance.herokuapp.com
 [Pension Wise Content]: https://www.google.com/fusiontables/DataSource?docid=1QUbEiGVnM6NWOJ62ciDwQMkUjTI0XjMZJg4FAJTo
 [Pension Wise Google Developers Console]: https://console.developers.google.com/project/pension-wise
-[Govspeak Markdown Extension]: https://github.com/alphagov/govspeak
+[Ruby]: https://www.ruby-lang.org
+[Bundler]: http://bundler.io
 [Google Fusion Table]: http://tables.googlelabs.com
 [Google Fusion Tables API]: https://developers.google.com/fusiontables
 [Google Analytics Reporting API]: https://developers.google.com/analytics/devguides/reporting
