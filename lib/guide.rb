@@ -1,3 +1,4 @@
+require_relative 'parser'
 require 'govspeak'
 require 'lingua'
 
@@ -51,7 +52,8 @@ class Guide
   private
 
   def govspeak
-    @govspeak ||= Govspeak::Document.new(@source)
+    content = Parser.new(@source).content
+    @govspeak ||= Govspeak::Document.new(content)
   end
 
   def readability
