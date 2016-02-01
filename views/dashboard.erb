@@ -122,8 +122,8 @@
                       .text(today.toLocaleDateString("en-GB"));
 
               // Slider
-              var slider = container.append("input")
-                      .attr("class", "slider")
+              var xslider = container.append("input")
+                      .attr("class", "xslider")
                       .attr("type", "range")
                       .attr("step", 1)
                       .attr("list", "dates")
@@ -137,7 +137,7 @@
                   slidedates.append("option").text(key);
               }
 
-              slider.on("input", function() {
+              xslider.on("input", function() {
                   var slidedates = d3.selectAll("#dates option");
                   var date = slidedates[0][this.value].value;
 
