@@ -121,7 +121,7 @@
                       .attr("x", width)
                       .text(today.toLocaleDateString("en-GB"));
 
-              // Slider
+              // Sliders
               var xslider = container.append("input")
                       .attr("class", "xslider")
                       .attr("type", "range")
@@ -153,6 +153,29 @@
                   var d = new Date(date);
                   d.setDate(d.getDate() + 1);
                   d3.select(".date").text(d.toLocaleDateString("en-GB"));
+              });
+
+              var yslider = container.append("input")
+                      .attr("class", "yslider")
+                      .attr("type", "range")
+                      .attr("orient", "vertical");
+
+              var pvs = container.append("datalist")
+                      .attr("id", "pageviews");
+
+              for (var i = 0; i < ymax; i += 100) {
+                pvs.append("option").text(i);
+              }
+
+              yslider.on("input", function() {
+                  var pvs = d3.selectAll("#pageviews option");
+                  var ymax = Number(pvs[0][this.value].value);
+
+                  yscale.domain([0, ymax + ymax / xaxis.ticks()]);
+
+                  var transition = svg.transition().duration(750).ease("sin-in-out");
+                  transition.select(".y.axis").call(yaxis);
+                  transition.selectAll(".bubble").attr("cy", function(d) { return yscale(pageviews(d)); });
               });
 
               // Draw bubbles

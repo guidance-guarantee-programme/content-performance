@@ -104,3 +104,13 @@ svg {
     margin-left: 55px;
     margin-right: 20px;
 }
+
+.yslider {
+    position: absolute;
+    top: 80px;
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 8px;
+    height: 75%;
+    padding: 0 5px;
+}
