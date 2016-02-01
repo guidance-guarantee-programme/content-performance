@@ -31,6 +31,11 @@ svg {
     font: 10px sans-serif;
 }
 
+.loading {
+    display: block;
+    margin: 10em auto;
+}
+
 .bubble {
     stroke: #f8f8f8;
     cursor: pointer;
