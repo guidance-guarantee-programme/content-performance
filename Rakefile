@@ -23,7 +23,7 @@ task :collect do
   queries = YAML.load_file('config/queries.yml')
   query = queries['UniquePageViews']
 
-  yesterday = Date.today.prev_day.strftime('%Y-%m-%d')
+  yesterday = ENV.fetch('PROCESS_DATE', Date.today.prev_day.strftime('%Y-%m-%d'))
   results = analytics.query(query['dimension'], query['metric'], query['sort'], yesterday, yesterday)
 
   # {slug: { path: '/url', upv: 1, time: 2 }}
@@ -46,9 +46,8 @@ task :collect do
         expected  = guide.expected_time
         observed  = ga[guide.slug][:time]
         pageviews = ga[guide.slug][:upv]
-        date      = Date.today.prev_day.strftime('%Y-%m-%d')
 
-        csv << [title, url, words, examples, links, score, expected, observed, pageviews, date]
+        csv << [title, url, words, examples, links, score, expected, observed, pageviews, yesterday]
       end
     end
   end
