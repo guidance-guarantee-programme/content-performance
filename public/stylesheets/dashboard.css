@@ -58,20 +58,6 @@ svg {
     border-radius: 2px;
 }
 
-.tooltip:after {
-    position: absolute;
-    top: 10%;
-    left: 0%;
-    margin-left: -5px;
-    width: 0;
-    border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent;
-    border-right: 5px solid #44b75e;
-    content: " ";
-    font-size: 0;
-    line-height: 0;
-}
-
 .axis path, .axis line {
     fill: none;
     stroke: #fff;
