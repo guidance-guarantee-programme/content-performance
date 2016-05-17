@@ -41,7 +41,14 @@
           // Data accessors
           var title = function(d) { return d.title; };
           var date = function(d) { return d.date; };
-          var percentread = function(d) { return +d.observed / +d.expected; };
+          var percentread = function(d) {
+              if(+d.observed > (+d.expected * 2)) {
+                  return 2.0;
+              } else {
+                  return +d.observed / +d.expected;
+              }
+
+          };
           var pageviews = function(d) { return +d.pageviews; };
           var words = function(d) { return +d.words; };
           var score = function(d) { return +d.score; };
@@ -55,7 +62,7 @@
 
               // Update the x and y scales
               var ymax = d3.max(container.datum(), pageviews);
-              var xdomain = [0, 1.0];
+              var xdomain = [0, 2.0];
               var ydomain = [0, ymax + ymax / xaxis.ticks()];
 
               xscale.range([0, width]).domain(xdomain);
