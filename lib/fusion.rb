@@ -25,6 +25,7 @@ class Fusion < Gooogle
     sql = <<-SQL.strip_heredoc
       SELECT Title, URL, Words, 'Reading Score (Flesch-Kincaid)', 'Expected Time (secs)', 'Observed Time (secs)', 'Unique Pageviews', Date
       FROM #{@table_id}
+      ORDER BY Date
     SQL
 
     @client.execute(:api_method => @api.query.sql_get,
